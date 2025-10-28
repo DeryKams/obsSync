@@ -18,6 +18,7 @@ STAMP="obsidian-bisync.init"
 #Имя файла и его путь неважен, но лучше его создавать в директории для временных файлов с очевидной пометкой и названием
 LOCK="/tmp/obsidian-bisync.lock"
 
+
 #Команда синхронизации папки. Ввиде массива, чтобы не использовать под процесс bash -c
 CMD="rclone bisync \"$OBS_DIR\" \"$REMOTE\" --verbose --progress --conflict-resolve newer --delete --max-delete=25 --exclude \".obsidian/cache/**\" --exclude \".trash/**\" --exclude \"$STAMP\""
 
@@ -28,10 +29,6 @@ if [ ! -f "$STAMP" ]; then
      # помечаем: инициализация выполнена
     touch "$STAMP"
 else
-
-
-
-
 
 echo "Запускаем подписку на событие"
 #Пока событие на изменение не применяется скрипт висит
