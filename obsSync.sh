@@ -35,13 +35,10 @@ rclone bisync
 
 if [ ! -f "$STAMP" ]; then
   # Первый запуск: инициализация bisync'а (создаёт базы сравнения)
-
-    if /usr/bin/flock -n "$LOCK" -c "$CMD"; then
-
-/usr/bin/flock -n"$LOCK" -c "$CMD --resync"
+    /usr/bin/flock -n"$LOCK" -c "$CMD --resync"
 
      # помечаем: инициализация выполнена
-  touch "$STAMP"
+    touch "$STAMP"
 else
 
 
