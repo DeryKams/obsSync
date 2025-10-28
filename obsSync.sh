@@ -19,18 +19,7 @@ STAMP="obsidian-bisync.init"
 LOCK="/tmp/obsidian-bisync.lock"
 
 #Команда синхронизации папки. Ввиде массива, чтобы не использовать под процесс bash -c
-CMD="
-rclone bisync
-\"$OBS_DIR\"
-\"$REMOTE\"
---delete
---verbose
---progress
---conflict-resolve newer
---max-delete=25
---exclude \".obsidian/cache/**\"
---exclude \".trash/**\"
---exclude \"$STAMP\"
+CMD="rclone bisync \"$OBS_DIR\" \"$REMOTE\" --delete --verbose --progress --conflict-resolve newer --max-delete=25 --exclude \".obsidian/cache/**\" --exclude \".trash/**\" --exclude \"$STAMP\"
 "
 
 if [ ! -f "$STAMP" ]; then
