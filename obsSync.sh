@@ -9,7 +9,7 @@ REMOTE="obsidian:obsidian"
 #время ожидания
 WAIT=10
 #Файл-флаг о первой синхронизации
-STAMP=".cache/obsidian-bisync.init"
+STAMP="obsidian-bisync.init"
 
 
 #Файл межпроцессороной блокировки. В один момент запускается один процесс
