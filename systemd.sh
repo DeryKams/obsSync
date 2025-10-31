@@ -1,4 +1,4 @@
-
+SCRIPT_PATH="{readlink -f "$0" }"
 # Проверяем существует ли такая директория для systemd сервисов пользователя
 if [ -d ~/.config/systemd/$USER ]; then
     echo "User systemd directory exists"
@@ -9,7 +9,7 @@ fi
 
 # Проверяем, созад ли user systemd service для синхронизации Obsidian
 
-if [ -f ~/.config/systemd/$USER/obsSync.service ]; then
+if [ -f ~/.config/systemd/user/obsSync.service ]; then
 
 echo "Synchronization service exists in user systemd"
 
@@ -17,7 +17,7 @@ else
 
 echo " Creating synchronization service in user systemd..."
 
-cat > ~/.config/systemd/$USER/obsSync.service << EOF
+cat > ~/.config/systemd/user/obsSync.service << EOF
 
 #[Unit] - секция для описания и зависимостей
 #Description - человекочитаемое описание сервиса
@@ -66,8 +66,7 @@ CPUQuota=10%
 
 [Install]
 WantedBy=default.target
-
-
-
 EOF
+
+
 fi
