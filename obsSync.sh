@@ -21,7 +21,44 @@ LOCK="/tmp/obsidian-bisync.lock"
 
 #Команда синхронизации папки. Ввиде массива, чтобы не использовать под процесс bash -c
 CMD="rclone bisync \"$OBS_DIR\" \"$REMOTE\" --verbose --progress --conflict-resolve newer --max-delete=25 --exclude \".obsidian/cache/**\" --exclude \".trash/**\" --exclude \"$STAMP\""
+# количество циклов для проверки
+CycleChecking=1
 
+#Проверка синхронизации
+# -ge - greater or equal, то есть больше или равно
+while [ $CycleChecking -ge 0 ]; do
+    
+    if pacman -Qi rclone >/dev/null 2>&1; then
+        
+        echo "rclone Installed"
+        CONF_PATH="$(rclone config file | tail -n 1)"
+        
+        # -n - non empty - то есть если строка не пустая
+        if [ -n "$CONF_PATH" ]; then
+            echo "Path to config rclone: $CONF_PATH"
+            # Прерываем цикл, если rclone существует и у него есть конфиг
+            break
+
+        else
+            echo "config is empty $CONF_PATH"
+        fi
+        
+    else
+        
+        echo "rclone dont istalled"
+        echo "installing rclone"
+        
+        sudo pacman -Syu rclone
+        
+    fi
+    
+    #$(()) - арифметическая подстановка в bash
+    CycleChecking=$((CycleChecking - 1))
+    
+done
+
+
+#Синхронизация файлов
 if [ ! -f "$STAMP" ]; then
   # Первый запуск: инициализация bisync'а (создаёт базы сравнения)
     /usr/bin/flock -n "$LOCK" -c "$CMD --resync"
