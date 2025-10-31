@@ -2,6 +2,9 @@
 
 #Идея скрипта - реагировать на изменения, но не дергать синхронизацию на каждое событие
 
+# Защита от сигналов завершения
+trap '' HUP INT TERM
+
 #Директория обсидиан
 OBS_DIR="/home/$USER/obsidian"
 #удаленная папка из настроек rclone
@@ -55,7 +58,7 @@ while [ $CycleChecking -ge 0 ]; do
         echo "rclone dont istalled"
         echo "installing rclone"
          #Если это последний цикл и  rclone не поставился
-        if [ $CycleChecking -e 0 ]; then
+        if [ $CycleChecking -eq 0 ]; then
 
         echo "We couldn't install rclone."
             exit 1
@@ -69,19 +72,19 @@ while [ $CycleChecking -ge 0 ]; do
     
 done
 
-# скрипт для постановки задания
-# Проверяем, существует ли уже такое задание
-if crontab -l 2>/dev/null | grep -q "$SCRIPT_PATH"; then
-    echo "Задание уже существует в cron"
-else
-    # Добавляем задание
-    (crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
-    echo "Задание успешно добавлено в cron"
-fi
+# # скрипт для постановки задания
+# # Проверяем, существует ли уже такое задание
+# if crontab -l 2>/dev/null | grep -q "$SCRIPT_PATH"; then
+#     echo "Задание уже существует в cron"
+# else
+#     # Добавляем задание
+#     (crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
+#     echo "Задание успешно добавлено в cron"
+# fi
 
-# Показываем текущие задания
-echo "Текущие cron задания:"
-crontab -l
+# # Показываем текущие задания
+# echo "Текущие cron задания:"
+# crontab -l
 
 #Синхронизация файлов
 if [ ! -f "$STAMP" ]; then
