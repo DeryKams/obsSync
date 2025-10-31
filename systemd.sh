@@ -1,4 +1,24 @@
-SYSTEMD_CFG="
+
+# Проверяем существует ли такая директория для systemd сервисов пользователя
+if [ -d ~/.config/systemd/$USER ]; then
+    echo "User systemd directory exists"
+else
+    mkdir -p ~/.config/systemd/$USER
+    echo "User systemd directory was created"
+fi
+
+# Проверяем, созад ли user systemd service для синхронизации Obsidian
+
+if [ -f ~/.config/systemd/$USER/obsSync.service ]; then
+
+echo "Synchronization service exists in user systemd"
+
+else
+
+echo " Creating synchronization service in user systemd..."
+
+cat > ~/.config/systemd/$USER/obsSync.service << EOF
+
 #[Unit] - секция для описания и зависимостей
 #Description - человекочитаемое описание сервиса
 #After=network.target - запускать после загрузки сети
@@ -46,26 +66,8 @@ CPUQuota=10%
 
 [Install]
 WantedBy=default.target
-"
 
-# Проверяем существует ли такая директория для systemd сервисов пользователя
-if [ -d ~/.config/systemd/$USER ]; then
-    echo "User systemd directory exists"
-else
-    mkdir ~/.config/systemd/$USER
-    echo "User systemd directory was created"
-fi
 
-# Проверяем, созад ли user systemd service для синхронизации Obsidian
 
-if [ -f ~/.config/systemd/$USER/obsSync.service ]; then
-
-echo "Synchronization service exists in user systemd"
-
-else 
-
-echo " Creating synchronization service in user systemd..."
-
-cat > ~/.config/systemd/$USER/obsSync.service << "$SYSTEMD_CFG"
-
+EOF
 fi
