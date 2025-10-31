@@ -1,4 +1,6 @@
-SCRIPT_PATH="${readlink -f "$0" }"
+#$() - подстановка вывода команды
+#${} - подстановка переменной
+SCRIPT_PATH="$(readlink -f "$0")"
 # Проверяем существует ли такая директория для systemd сервисов пользователя
 if [ -d ~/.config/systemd/$USER ]; then
     echo "User systemd directory exists"
